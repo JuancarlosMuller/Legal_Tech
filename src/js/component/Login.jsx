@@ -25,12 +25,15 @@ const Login = () => {
                 body: JSON.stringify({ mail: email, password }),
             });
 
+            const data = await response.json(); // Parsea la respuesta como JSON
+
             if (response.ok) {
-                window.location.href = '/';
+                console.log("Inicio exitoso, Token generado", data)
+
             } else {
-                // Si la respuesta indica un error (por ejemplo, credenciales inválidas),
-                // muestra un mensaje de error al usuario.
-                setError('Credenciales inválidas. Por favor, inténtalo de nuevo.');
+
+                // Muestro un mensaje de error al usuario.
+                setError(data.message); // Utiliza el mensaje de error proporcionado por el servidor.
             }
         } catch (err) {
             console.error('Error en la solicitud:', err);

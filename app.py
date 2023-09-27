@@ -13,12 +13,18 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.security import check_password_hash
 from flask_session import Session
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 logging.basicConfig(filename="app.log", level=logging.INFO)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydatabase.db"
 app.config["SECRET_KEY"] = "123456"  # Mi propia clave secreta
+
+# Configura JWTManager
+app.config["JWT_SECRET_KEY"] = "123456"
+jwt = JWTManager(app)
 migrate = Migrate(app, db)
 
 # Configuro la extensión Flask-Session
@@ -396,16 +402,17 @@ def login():
                 401,
             )
 
-        # Almaceno el ID del usuario en la sesión para indicar que están autenticados
-        session["user_id"] = user.id
+        # Genero un token JWT para el usuario autenticado
+        access_token = create_access_token(identity=str(user.id))
 
-        return jsonify({"success": True, "message": "Sesión iniciada con éxito."}), 200
+        # Devuelvo el token JWT en la respuesta
+        return jsonify({"success": True, "access_token": access_token}), 200
     except Exception as e:
         # Manejo de errores de la base de datos u otros errores
         return (
             jsonify({"success": False, "message": str(e)}),
             500,
-        )  # Devuelve un código de error 500 en caso de fallo
+        )  # Devuelv0 un código de error 500 en caso de fallo
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ export const UserProvider = ({ children }) => {
   const [planetData, setPlanetData] = useState([]);
   const [favorites, setFavorites] = useState(() => {
     const storedFavorites = localStorage.getItem("favorites");
+
     return storedFavorites ? JSON.parse(storedFavorites) : [];
   });
 
@@ -53,16 +54,16 @@ export const UserProvider = ({ children }) => {
           Promise.all(characterPromises)
             .then(characterDataArray => {
               console.log("Detalles de los personajes:", characterDataArray);
-// Modificar los IDs de los personajes con el prefijo "C_"
-    const modifiedCharacterDataArray = characterDataArray.map(character => ({
-      ...character,
-      uid: "C_" + character.uid
-    }));
+              // Modificar los IDs de los personajes con el prefijo "C_"
+              const modifiedCharacterDataArray = characterDataArray.map(character => ({
+                ...character,
+                uid: "C_" + character.uid
+              }));
 
-    // Almacenar la información de los personajes en el estado characterData
-    setCharacterData(modifiedCharacterDataArray);
-  })
-              .catch(error => {
+              // Almacenar la información de los personajes en el estado characterData
+              setCharacterData(modifiedCharacterDataArray);
+            })
+            .catch(error => {
               console.error("Error en la solicitud GET:", error);
             });
         } else {
@@ -115,15 +116,15 @@ export const UserProvider = ({ children }) => {
           Promise.all(planetPromises)
             .then(planetDataArray => {
               console.log("Detalles de los planetas:", planetDataArray);
-             // Modificar los IDs de los Planetas con el prefijo "P_"
-    const modifiedplanetDataArray = planetDataArray.map(planet => ({
-      ...planet,
-      uid: "P_" + planet.uid
-    }));
+              // Modificar los IDs de los Planetas con el prefijo "P_"
+              const modifiedplanetDataArray = planetDataArray.map(planet => ({
+                ...planet,
+                uid: "P_" + planet.uid
+              }));
 
-    // Almacenar la información de los planetas en el estado planetData
-    setPlanetData(modifiedplanetDataArray);
-  })
+              // Almacenar la información de los planetas en el estado planetData
+              setPlanetData(modifiedplanetDataArray);
+            })
             .catch(error => {
               console.error("Error en la solicitud GET:", error);
             });
