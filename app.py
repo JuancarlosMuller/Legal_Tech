@@ -1,14 +1,33 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
 from models import Planet, Character, User, Favorite
 import requests
 from models import db
-
+from werkzeug.security import generate_password_hash
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from datetime import datetime
+from flask_cors import CORS
+from flask import flash, redirect, url_for
+import logging
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from werkzeug.security import check_password_hash
+from flask_session import Session
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
+logging.basicConfig(filename="app.log", level=logging.INFO)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mydatabase.db"
 app.config["SECRET_KEY"] = "123456"  # Mi propia clave secreta
+migrate = Migrate(app, db)
+
+# Configuro la extensión Flask-Session
+app.config[
+    "SESSION_TYPE"
+] = "filesystem"  # Almacena las sesiones en el sistema de archivos
+app.config["SESSION_PERMANENT"] = False  # Las sesiones no son permanentes
+Session(app)
+
 db.init_app(app)
 
 # Configuracion Flask-Admin
@@ -313,7 +332,84 @@ def delete_character_favorite(character_id):
     )
 
 
+@app.route("/signup", methods=["POST"])
+def signup():
+    try:
+        data = request.get_json()
+        if not data or "mail" not in data or "password" not in data:
+            return jsonify({"message": "Datos JSON inválidos"}), 400
+
+        mail = data["mail"]
+        password = data["password"]
+
+        # Verifico si el correo ya existe en la base de datos
+        existing_mail = User.query.filter_by(mail=mail).first()
+
+        if existing_mail:
+            return jsonify({"message": "El correo electrónico ya está registrado"}), 400
+
+        # Uso el correo electrónico como nombre de usuario
+        username = mail
+
+        # Creo un nuevo usuario y almaceno la contraseña en formato hash
+        new_user = User(
+            mail=mail,
+            username=username,
+        )
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        return jsonify({"message": "Usuario creado con éxito"}), 201
+    except Exception as e:
+        # Manejo de errores de la base de datos u otros errores
+        db.session.rollback()
+        return (
+            jsonify({"message": str(e)}),
+            500,
+        )  # Devuelvo un código de error 500 en caso de fallo
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    try:
+        data = request.get_json()
+        mail = data.get("mail")
+        password = data.get("password")
+
+        if not mail or not password:
+            return (
+                jsonify(
+                    {
+                        "success": False,
+                        "message": "Correo electrónico y contraseña son requeridos.",
+                    }
+                ),
+                400,
+            )
+
+        # Compruebo si el usuario existe
+        user = User.query.filter_by(mail=mail).first()
+        if not user or not check_password_hash(user.password_hash, password):
+            return (
+                jsonify({"success": False, "message": "Credenciales inválidas."}),
+                401,
+            )
+
+        # Almaceno el ID del usuario en la sesión para indicar que están autenticados
+        session["user_id"] = user.id
+
+        return jsonify({"success": True, "message": "Sesión iniciada con éxito."}), 200
+    except Exception as e:
+        # Manejo de errores de la base de datos u otros errores
+        return (
+            jsonify({"success": False, "message": str(e)}),
+            500,
+        )  # Devuelve un código de error 500 en caso de fallo
+
+
 if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
     with app.app_context():
         db.drop_all()
         db.create_all()
