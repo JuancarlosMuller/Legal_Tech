@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const UserContext = createContext();
 
@@ -12,6 +13,9 @@ export const UserProvider = ({ children }) => {
 
     return storedFavorites ? JSON.parse(storedFavorites) : [];
   });
+
+
+
 
   const getCharacters = () => {
     const url = "https://www.swapi.tech/api/people/";
@@ -137,6 +141,35 @@ export const UserProvider = ({ children }) => {
       });
   };
 
+  const flogin = (email, password) => {
+    const navigate = useNavigate();
+    fetch('http://127.0.0.1:5000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ mail: email, password }),
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json(); // Parseo la respuesta como JSON si la respuesta es exitosa
+        } else {
+          throw new Error('Error en la solicitud.'); // Lanzo un error si la respuesta no es exitosa
+        }
+      })
+      .then(data => {
+        // Manejo los datos si la respuesta es exitosa
+        console.log("Inicio exitoso, Token generado", data);
+        navigate('/');
+      })
+      .catch(err => {
+        // Manejo los errores aquí
+        console.error('Error en la solicitud:', err.message);
+        setError('Error en la solicitud. Por favor, inténtalo de nuevo más tarde.');
+      });
+  };
+
+
 
   useEffect(() => {
     getCharacters();
@@ -164,7 +197,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ charactersData, characterData, planetsData, planetData, favorites, addFavorite, removeFavorite, isFavorite }}>
+    <UserContext.Provider value={{ flogin, charactersData, characterData, planetsData, planetData, favorites, addFavorite, removeFavorite, isFavorite }}>
       {children}
     </UserContext.Provider>
   );
