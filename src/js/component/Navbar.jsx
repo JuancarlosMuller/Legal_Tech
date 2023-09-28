@@ -1,12 +1,22 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Agrega useNavigate
 import { UserContext } from "../store/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
-    const { favorites, removeFavorite } = useContext(UserContext);
+    const { favorites, removeFavorite, logout } = useContext(UserContext);
+    const navigate = useNavigate(); // Obtiene la función navigate
+
+    // Verifica si el usuario está autenticado (por ejemplo, si existe un token)
+    const isAuthenticated = sessionStorage.getItem('token');
+
+    // Función para realizar el logout y redirigir al usuario a la página de inicio de sesión
+    const handleLogout = () => {
+        logout(); // Llama a la función de logout en el contexto
+        navigate('/login'); // Redirige al usuario a la página de inicio de sesión
+    };
 
     return (
         <nav className="navbar navbar-expand-lg bg-light">
@@ -17,7 +27,6 @@ const Navbar = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav ms-auto bg-primary rounded">
-
                         <li className="nav-item dropdown">
                             <div className="dropdown">
                                 <a className="nav-link dropdown-toggle" href="#" role="button" id="favorites-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,10 +55,14 @@ const Navbar = () => {
 
                         <li className="nav-item dropdown">
                             <div className="dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" role="button" id="account-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <FontAwesomeIcon icon={faUser} className="me-1" />
-                                    Account
-                                </a>
+                                {isAuthenticated ? (
+                                    <button className="btn btn-link text-white" onClick={handleLogout}>Logout</button>
+                                ) : (
+                                    <a className="nav-link dropdown-toggle" href="#" role="button" id="account-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <FontAwesomeIcon icon={faUser} className="me-1" />
+                                        Account
+                                    </a>
+                                )}
                                 <ul className="dropdown-menu" aria-labelledby="account-dropdown">
                                     <li><Link to="/login" className="dropdown-item">Login</Link></li>
                                     <li><Link to="/signup" className="dropdown-item">Signup</Link></li>

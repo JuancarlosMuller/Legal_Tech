@@ -172,6 +172,11 @@ export const UserProvider = ({ children }) => {
     });
   };
 
+  const logout = () => {
+    // Elimino el token de autenticación.
+    sessionStorage.removeItem('token');
+
+  };
 
 
   useEffect(() => {
@@ -200,7 +205,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ flogin, charactersData, characterData, planetsData, planetData, favorites, addFavorite, removeFavorite, isFavorite }}>
+    <UserContext.Provider value={{ logout, flogin, charactersData, characterData, planetsData, planetData, favorites, addFavorite, removeFavorite, isFavorite }}>
       {children}
     </UserContext.Provider>
   );
