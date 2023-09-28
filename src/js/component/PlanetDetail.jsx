@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPeopleGroup, faCloudSun, faMountain, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faSolidHeart, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
-
+import Footer from "./Footer";
 const PlanetDetail = () => {
     const { planetData, addFavorite, removeFavorite, isFavorite } = useContext(UserContext);
     const { planetId } = useParams();
@@ -41,20 +41,20 @@ const PlanetDetail = () => {
                             </div>
                             <p className="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero</p>
                             <div className="d-flex">
-                            <FontAwesomeIcon icon={isFavorite(`P_${selectedPlanet.result.uid}`) ? faSolidHeart : faRegularHeart} style={{ color: isFavorite(`P_${selectedPlanet.result.uid}`) ? "#f90606" : "" }} className="fa-xl" onClick={() => {
-                                            const favorite = {
-                                                id: `P_${selectedPlanet.result.uid}`,
-                                                name: selectedPlanet.result.properties.name
-                                            };
+                                <FontAwesomeIcon icon={isFavorite(`P_${selectedPlanet.result.uid}`) ? faSolidHeart : faRegularHeart} style={{ color: isFavorite(`P_${selectedPlanet.result.uid}`) ? "#f90606" : "" }} className="fa-xl" onClick={() => {
+                                    const favorite = {
+                                        id: `P_${selectedPlanet.result.uid}`,
+                                        name: selectedPlanet.result.properties.name
+                                    };
 
-                                            if (storedFavorites.some((item) => item.id === favorite.id)) {
-                                                removeFavorite(favorite);
-                                            } else {
-                                                addFavorite(favorite);
-                                            }
-                                        }}
-                                        />
-                              
+                                    if (storedFavorites.some((item) => item.id === favorite.id)) {
+                                        removeFavorite(favorite);
+                                    } else {
+                                        addFavorite(favorite);
+                                    }
+                                }}
+                                />
+
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@ const PlanetDetail = () => {
 
                                             <h5 className="fw-bolder">{planet.result.properties.name}</h5>
 
-                                           Population: {planet.result.properties.population}
+                                            Population: {planet.result.properties.population}
                                         </div>
                                     </div>
 
@@ -85,23 +85,23 @@ const PlanetDetail = () => {
                                         <div className="text-center d-flex justify-content-between align-items-center">
                                             <Link to={`/detail_planet/${planet.result.uid}`} className="btn btn-outline-dark mt-auto">View details</Link>
                                             <FontAwesomeIcon icon={isFavorite(`P_${planet.result.uid}`) ? faSolidHeart : faRegularHeart} style={{ color: isFavorite(`P_${planet.result.uid}`) ? "#f90606" : "" }} className="fa-xl" onClick={() => {
-                                            const favorite = {
-                                                id: `P_${planet.result.uid}`,
-                                                name: planet.result.properties.name
-                                            };
+                                                const favorite = {
+                                                    id: `P_${planet.result.uid}`,
+                                                    name: planet.result.properties.name
+                                                };
 
-                                            if (storedFavorites.some((item) => item.id === favorite.id)) {
-                                                removeFavorite(favorite);
-                                            } else {
-                                                addFavorite(favorite);
-                                            }
-                                        }}
-                                        />
-                                        
-                                        
-                                        
-                                        
-                                        
+                                                if (storedFavorites.some((item) => item.id === favorite.id)) {
+                                                    removeFavorite(favorite);
+                                                } else {
+                                                    addFavorite(favorite);
+                                                }
+                                            }}
+                                            />
+
+
+
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -110,6 +110,7 @@ const PlanetDetail = () => {
                     </div>
                 </div>
             </section>
+            <Footer />
         </>
     )
 };

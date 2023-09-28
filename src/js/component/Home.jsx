@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as faSolidHeart, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
+import Footer from "./Footer";
 
 const Home = () => {
     const { characterData, planetData, addFavorite, removeFavorite, isFavorite } = useContext(UserContext);
@@ -13,7 +14,7 @@ const Home = () => {
 
 
     return (<>
-     
+
         <section className="py-5" >
             <h1> Characters: </h1>
             <div className="container px-4 px-lg-5 mt-5" >
@@ -105,6 +106,7 @@ const Home = () => {
             </div>
         </section>
 
+        <Footer />
 
     </>
     )

@@ -29,7 +29,7 @@ ReactDOM.render(
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
-      <Footer />
+
     </Router>
   </UserProvider>,
   document.querySelector('#app')

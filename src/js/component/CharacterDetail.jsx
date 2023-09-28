@@ -7,9 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPersonHalfDress, faEye, faCalendar, faRulerVertical } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faSolidHeart, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faRegularHeart } from "@fortawesome/free-regular-svg-icons";
+import Footer from "./Footer";
 
 const CharacterDetail = () => {
-    const { characterData,addFavorite, removeFavorite, isFavorite  } = useContext(UserContext);
+    const { characterData, addFavorite, removeFavorite, isFavorite } = useContext(UserContext);
     const { characterId } = useParams();
     const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
@@ -42,21 +43,21 @@ const CharacterDetail = () => {
                             <p className="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus ipsam minima ea iste laborum vero</p>
                             <div className="d-flex">
 
-                                
-                                <FontAwesomeIcon icon={isFavorite(`C_${selectedCharacter.result.uid}`) ? faSolidHeart : faRegularHeart} style={{ color: isFavorite(`C_${selectedCharacter.result.uid}`) ? "#f90606" : "" }} className="fa-xl" onClick={() => {
-                                            const favorite = {
-                                                id: `C_${selectedCharacter.result.uid}`,
-                                                name: selectedCharacter.result.properties.name
-                                            };
 
-                                            if (storedFavorites.some((item) => item.id === favorite.id)) {
-                                                removeFavorite(favorite);
-                                            } else {
-                                                addFavorite(favorite);
-                                            }
-                                        }}
-                                        />
-                               
+                                <FontAwesomeIcon icon={isFavorite(`C_${selectedCharacter.result.uid}`) ? faSolidHeart : faRegularHeart} style={{ color: isFavorite(`C_${selectedCharacter.result.uid}`) ? "#f90606" : "" }} className="fa-xl" onClick={() => {
+                                    const favorite = {
+                                        id: `C_${selectedCharacter.result.uid}`,
+                                        name: selectedCharacter.result.properties.name
+                                    };
+
+                                    if (storedFavorites.some((item) => item.id === favorite.id)) {
+                                        removeFavorite(favorite);
+                                    } else {
+                                        addFavorite(favorite);
+                                    }
+                                }}
+                                />
+
                             </div>
                         </div>
                     </div>
@@ -87,18 +88,18 @@ const CharacterDetail = () => {
                                         <div className="text-center d-flex justify-content-between align-items-center">
                                             <Link to={`/detail_character/${character.result.uid}`} className="btn btn-outline-dark mt-auto">View options</Link>
                                             <FontAwesomeIcon icon={isFavorite(`C_${character.result.uid}`) ? faSolidHeart : faRegularHeart} style={{ color: isFavorite(`C_${character.result.uid}`) ? "#f90606" : "" }} className="fa-xl" onClick={() => {
-                                            const favorite = {
-                                                id: `C_${character.result.uid}`,
-                                                name: character.result.properties.name
-                                            };
+                                                const favorite = {
+                                                    id: `C_${character.result.uid}`,
+                                                    name: character.result.properties.name
+                                                };
 
-                                            if (storedFavorites.some((item) => item.id === favorite.id)) {
-                                                removeFavorite(favorite);
-                                            } else {
-                                                addFavorite(favorite);
-                                            }
-                                        }}
-                                        />
+                                                if (storedFavorites.some((item) => item.id === favorite.id)) {
+                                                    removeFavorite(favorite);
+                                                } else {
+                                                    addFavorite(favorite);
+                                                }
+                                            }}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -107,6 +108,7 @@ const CharacterDetail = () => {
                     </div>
                 </div>
             </section>
+            <Footer />
         </>
     )
 };
