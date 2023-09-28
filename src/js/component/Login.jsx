@@ -20,7 +20,13 @@ const Login = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        flogin(email, password, navigate);
+        const resultado = await flogin(email, password);
+        console.log("success:", resultado, "Estas siendo redirigido al Home");
+        if (resultado) {
+            // Redirigo al usuario a la ruta.
+            navigate("/home");
+        }
+
     }
 
 

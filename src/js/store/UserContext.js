@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 
 export const UserContext = createContext();
 
@@ -142,31 +142,34 @@ export const UserProvider = ({ children }) => {
   };
 
   const flogin = (email, password) => {
-    const navigate = useNavigate();
-    fetch('http://127.0.0.1:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ mail: email, password }),
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json(); // Parseo la respuesta como JSON si la respuesta es exitosa
-        } else {
-          throw new Error('Error en la solicitud.'); // Lanzo un error si la respuesta no es exitosa
-        }
+    return new Promise((resolve, reject) => {
+      fetch('http://127.0.0.1:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mail: email, password }),
       })
-      .then(data => {
-        // Manejo los datos si la respuesta es exitosa
-        console.log("Inicio exitoso, Token generado", data);
-        navigate('/');
-      })
-      .catch(err => {
-        // Manejo los errores aquí
-        console.error('Error en la solicitud:', err.message);
-        setError('Error en la solicitud. Por favor, inténtalo de nuevo más tarde.');
-      });
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Error en la solicitud.');
+          }
+        })
+        .then(data => {
+          console.log("Inicio exitoso, Token generado");
+          const token = data.access_token;
+          console.log("Este es el Token", token);
+          sessionStorage.setItem('token', token);
+          resolve(true); // Resuelvo la promesa con true en caso de éxito
+        })
+        .catch(err => {
+          console.error('Error en la solicitud:', err.message);
+          setError('Error en la solicitud. Por favor, inténtalo de nuevo más tarde.');
+          resolve(false); // Resuelvo la promesa con false en caso de error
+        });
+    });
   };
 
 

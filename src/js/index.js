@@ -15,6 +15,7 @@ import PlanetDetail from "./component/PlanetDetail";
 import Footer from "./component/Footer";
 import Login from "./component/Login";
 import Signup from "./component/Signup"; // Importa el componente Signup
+import PrivateRoute from "./component/PrivateRoute"
 
 //render your react application
 ReactDOM.render(
@@ -22,11 +23,11 @@ ReactDOM.render(
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/detail_character/:characterId" element={<CharacterDetail />} />
-        <Route path="/detail_planet/:planetId" element={<PlanetDetail />} />
+        <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+        <Route path="/detail_character/:characterId" element={<PrivateRoute element={<CharacterDetail />} />} />
+        <Route path="/detail_planet/:planetId" element={<PrivateRoute element={<PlanetDetail />} />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} /> {/* Agrega la ruta para Signup */}
+        <Route path="/signup" element={<Signup />} />
       </Routes>
       <Footer />
     </Router>
