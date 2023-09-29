@@ -8,7 +8,7 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("datos entregados:", userData)
+
         const url = "http://127.0.0.1:5000/signup"; // URL del servidor Flask
 
         const postOptions = {
@@ -24,8 +24,9 @@ const Signup = () => {
             const response = await fetch(url, postOptions);
 
             if (response.ok) {
-                // Usuario creado con éxito, redirigo a la página de perfil.
+
                 window.location.href = '/login';
+                console.log("Usuario Creado con Exito.")
             } else {
                 console.error('Revisa los datos ingresados');
             }
