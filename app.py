@@ -406,7 +406,7 @@ def login():
         access_token = create_access_token(identity=str(user.id))
 
         # Devuelvo el token JWT en la respuesta
-        return jsonify({"success": True, "access_token": access_token}), 200
+        return jsonify({"success": True, "access_token": True}), 200
     except Exception as e:
         # Manejo de errores de la base de datos u otros errores
         return (
