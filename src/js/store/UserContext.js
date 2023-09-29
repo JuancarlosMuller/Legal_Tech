@@ -160,7 +160,7 @@ export const UserProvider = ({ children }) => {
         .then(data => {
           console.log("Inicio exitoso, Token generado");
           const token = data.access_token;
-          console.log("Este es el Token", token);
+
           sessionStorage.setItem('token', token);
           resolve(true); // Resuelvo la promesa con true en caso de éxito
         })
