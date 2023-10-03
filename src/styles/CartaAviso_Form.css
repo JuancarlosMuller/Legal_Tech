@@ -1,0 +1,35 @@
+/* Formulario.css */
+.container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h3 {
+    color: #4285f4; /* Color similar al de Google */
+  }
+  
+  .form-label {
+    font-weight: bold;
+  }
+  
+  .form-control {
+    border: 1px solid #ccc;
+  }
+  
+  .form-control:focus {
+    border-color: #4285f4; /* Color similar al de Google cuando el input está enfocado */
+  }
+  
+  .btn-primary {
+    background-color: #4285f4; /* Color similar al de Google para el botón */
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #357ae8; /* Color similar al de Google cuando se pasa el mouse sobre el botón */
+  }
+  
+  /* Puedes personalizar más los estilos según tus preferencias */
+  
