@@ -21,6 +21,7 @@ import Signup from "./component/Signup"; // Importa el componente Signup
 import PrivateRoute from "./component/PrivateRoute"
 import Navbar_LM from "./component/Navbar_LM";
 import CartaAviso_Form from "./component/CartaAviso_Form";
+import ContratoArriendo_Form from "./component/ContratoArriendo_Form";
 
 //render your react application
 ReactDOM.render(
@@ -29,6 +30,7 @@ ReactDOM.render(
 
       <Routes>
         <Route path="/carta_aviso" element={<CartaAviso_Form />} />
+        <Route path="/contrato_arriendo" element={<ContratoArriendo_Form />} />
         <Route path="/home1" element={<Navbar_LM />} />
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />
         <Route path="/detail_character/:characterId" element={<PrivateRoute element={<CharacterDetail />} />} />
