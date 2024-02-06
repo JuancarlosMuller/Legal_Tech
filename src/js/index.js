@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import "../styles/index.css";
 import "../styles/Navbar_LM.css";
 import "../styles/CartaAviso_Form.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 //import your own components
 import Navbar from "./component/Navbar";
