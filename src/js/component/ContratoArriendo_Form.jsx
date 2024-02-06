@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import ContratoArriendo from './ContratoArriendo';
 import ReactDOMServer from "react-dom/server";
 import htmlDocx from 'html-docx-js/dist/html-docx';
+import html2pdf from 'html2pdf.js';
+
 function ContratoArriendo_Form() {
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
@@ -41,17 +43,9 @@ function ContratoArriendo_Form() {
 
     const generateDocument = () => {
         const htmlContent = ReactDOMServer.renderToStaticMarkup(<ContratoArriendo formData={formData} />);
-        const convertedDocx = htmlDocx.asBlob(htmlContent);
-        const fileName = 'DocumentoGenerado.docx';
-        if (window.navigator.msSaveBlob) {
-            window.navigator.msSaveBlob(convertedDocx, fileName);
-        } else {
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(convertedDocx);
-            link.download = fileName;
-            link.click();
-        }
+        html2pdf().from(htmlContent).save();
     };
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
