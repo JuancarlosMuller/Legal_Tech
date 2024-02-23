@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, session
-from models import Planet, Character, User, Favorite
+from models import Planet, Character, User, Favorite, Document
 import requests
 from models import db
 from werkzeug.security import generate_password_hash
@@ -15,6 +15,7 @@ from werkzeug.security import check_password_hash
 from flask_session import Session
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import JWTManager
+from uuid import uuid4
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -28,9 +29,9 @@ jwt = JWTManager(app)
 migrate = Migrate(app, db)
 
 # Configuro la extensión Flask-Session
-app.config[
-    "SESSION_TYPE"
-] = "filesystem"  # Almacena las sesiones en el sistema de archivos
+app.config["SESSION_TYPE"] = (
+    "filesystem"  # Almacena las sesiones en el sistema de archivos
+)
 app.config["SESSION_PERMANENT"] = False  # Las sesiones no son permanentes
 Session(app)
 
@@ -39,6 +40,28 @@ db.init_app(app)
 # Configuracion Flask-Admin
 admin = Admin(app, name="Admin", template_mode="bootstrap3")
 admin.add_view(ModelView(User, db.session))
+
+
+@app.route("/documents", methods=["POST"])
+def create_document():
+    try:
+        # Genera un UUID único para el documento
+        token = str(uuid4())
+
+        # Crea un nuevo documento con el token generado
+        new_document = Document()  # Crea una instancia de Document
+        new_document.token = token  # Asigna el valor del token
+        db.session.add(new_document)
+        db.session.commit()
+
+        return jsonify({"message": "Documento creado con éxito", "token": token}), 201
+    except Exception as e:
+        # Manejo de errores de la base de datos u otros errores
+        db.session.rollback()
+        return (
+            jsonify({"message": str(e)}),
+            500,
+        )  # Devuelve un código de error 500 en caso de fallo
 
 
 # Creacion de Endpoint GET personajes y Planetas.

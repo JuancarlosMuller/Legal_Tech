@@ -41,9 +41,32 @@ function ContratoArriendo_Form() {
         setStep(step - 1);
     };
 
-    const generateDocument = () => {
-        const htmlContent = ReactDOMServer.renderToStaticMarkup(<ContratoArriendo formData={formData} />);
-        html2pdf().from(htmlContent).save();
+    const generateDocument = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/documents', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const token = data.token; // Obtiene el token generado del servidor
+                console.log('Token generado:', token); // Imprime el token en la consola
+
+                const htmlContent = ReactDOMServer.renderToStaticMarkup(<ContratoArriendo formData={formData} />);
+                html2pdf().from(htmlContent).save();
+
+                // Opcionalmente, puedes guardar el token en el estado del componente o en sesión
+            } else {
+                const data = await response.json();
+                console.error('Error al crear el documento:', data.message);
+                // Aquí puedes mostrar un mensaje de error al usuario si lo deseas
+            }
+        } catch (error) {
+            console.error('Error al generar el documento:', error);
+        }
     };
 
 

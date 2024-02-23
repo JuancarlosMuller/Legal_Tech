@@ -28,6 +28,16 @@ class User(db.Model):
         )  # Cambiar a password_hash
 
 
+class Document(db.Model):
+    __tablename__ = "document"
+    id = Column(Integer, primary_key=True)
+    token = Column(String(255), unique=True)  # Agrega un campo para el token
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Document {self.id}>"
+
+
 class Character(db.Model):
     __tablename__ = "character"
     id = db.Column(db.Integer, primary_key=True)
