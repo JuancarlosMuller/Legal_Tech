@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ContratoArriendo({ formData }) {
+function ContratoArriendo({ formData, token }) {
     return (
         <html>
             <head>
@@ -12,6 +12,11 @@ function ContratoArriendo({ formData }) {
                         margin: 0;
                         padding: 0;
                     }
+                    .piepagina{
+                        margin-top: 20%;
+                        margin-left: 50px;
+                        margin-right: 50px;
+                                        }
                     h4 {
                         text-align: center;
                         margin-top: 60px;
@@ -93,7 +98,9 @@ function ContratoArriendo({ formData }) {
                 <p>_____________________________              ______________________________</p>
                 <p className="firmante1"><b>Arrendador</b></p> <p className="firmante2"><b>Arrendatario</b></p>
             </div>
-
+            <div className="piepagina">
+                <p>Este documento ha sido generado por nuestra plataforma con el codigo de validación:  <span style={{ color: '#08d85a' }}>{token}</span></p>
+            </div>
         </html >
     );
 }

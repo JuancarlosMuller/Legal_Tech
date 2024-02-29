@@ -24,7 +24,7 @@ function ContratoArriendo_Form() {
         GarantiaArriendo: '',
         Aviso: ''
     });
-
+    const [token, setToken] = useState('');
     const handleInputChange = (e) => {
         const { id, value } = e.target;
         setFormData({
@@ -53,9 +53,10 @@ function ContratoArriendo_Form() {
             if (response.ok) {
                 const data = await response.json();
                 const token = data.token; // Obtiene el token generado del servidor
+                setToken(token);
                 console.log('Token generado:', token); // Imprime el token en la consola
-
-                const htmlContent = ReactDOMServer.renderToStaticMarkup(<ContratoArriendo formData={formData} />);
+                // Guarda el token en el estado del componente
+                const htmlContent = ReactDOMServer.renderToStaticMarkup(<ContratoArriendo formData={formData} token={token} />);
                 html2pdf().from(htmlContent).save();
 
                 // Opcionalmente, puedes guardar el token en el estado del componente o en sesión
