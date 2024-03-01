@@ -34,7 +34,13 @@ function ContratoArriendo_Form() {
     };
 
     const handleNextStep = () => {
-        setStep(step + 1);
+        // Validar si todos los campos están llenos antes de pasar al siguiente paso
+        const allFieldsFilled = Object.values(formData).every(value => value.trim() !== '');
+        if (allFieldsFilled) {
+            setStep(step + 1);
+        } else {
+            alert('Por favor complete todos los campos antes de continuar.');
+        }
     };
 
     const handlePreviousStep = () => {
@@ -87,16 +93,20 @@ function ContratoArriendo_Form() {
                 {step === 1 && (
                     <div>
                         <h3>Sección Datos Contrato</h3>
+                        <p style={{ color: '#7a7a7a', fontSize: '14px' }}>
+                            Esta sección es donde se detalla de manera referencial la ciudad en donde se firma el documento 📝 y su fecha 📅.
+                        </p>
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="mb-3">
                                     <label htmlFor="CiudadArriendo" className="form-label">
-                                        Ciudad de Arriendo
+                                        Ciudad de Firma
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="CiudadArriendo"
+                                        placeholder="Santiago"
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -108,6 +118,7 @@ function ContratoArriendo_Form() {
                                         type="date"
                                         className="form-control"
                                         id="FechaFirma"
+                                        placeholder="01-10-2024"
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -117,39 +128,45 @@ function ContratoArriendo_Form() {
                 )}
                 {step === 2 && (
                     <div>
-                        <h3>Sección Datos Arrendador</h3>
+                        <h3>Sección Datos Arrendador:</h3>
+                        <p style={{ color: '#7a7a7a', fontSize: '14px' }}>
+                            Un arrendador es quien entrega una propiedad 🏠 a la otra persona a cambio de un pago regular conocido como alquiler o arriendo 💰.
+                        </p>
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="mb-3">
                                     <label htmlFor="nombreArrendador" className="form-label">
-                                        Nombre del Arrendador
+                                        Nombre completo del Arrendador
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="nombreArrendador"
+                                        placeholder="Juan Pérez Soto"
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="rutArrendador" className="form-label">
-                                        RUT del Arrendador
+                                        RUT del Arrendador, con punto y guion
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="rutArrendador"
+                                        placeholder="16.888.495-6"
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="direccionArrendador" className="form-label">
-                                        Dirección del Arrendador
+                                        Dirección del Arrendador (Calle, Número y Ciudad).
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="direccionArrendador"
+                                        placeholder="Abdon Yarra #863, depto 503"
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -161,6 +178,7 @@ function ContratoArriendo_Form() {
                                         type="text"
                                         className="form-control"
                                         id="ComunaArrendador"
+                                        placeholder="Peñalolen"
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -171,27 +189,32 @@ function ContratoArriendo_Form() {
                 {step === 3 && (
                     <div>
                         <h3>Sección Datos Arrendatario</h3>
+                        <p style={{ color: '#7a7a7a', fontSize: '14px' }}>
+                            Un arrendatario es quien entrega un pago regular conocido como alquiler o arriendo 💰.
+                        </p>
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="mb-3">
                                     <label htmlFor="nombreArrendatario" className="form-label">
-                                        Nombre del Arrendatario
+                                        Nombre completo del Arrendatario
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="nombreArrendatario"
+                                        placeholder="Maria Alejandra Jimenez Baeza"
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="rutArrendatario" className="form-label">
-                                        RUT del Arrendatario
+                                        RUT del Arrendatario, con punto y guion
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="rutArrendatario"
+                                        placeholder="17.017.957-4"
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -202,38 +225,44 @@ function ContratoArriendo_Form() {
                 {step === 4 && (
                     <div>
                         <h3>Sección Datos Propiedad</h3>
+                        <p style={{ color: '#7a7a7a', fontSize: '14px' }}>
+                            En esta seccion es donde se indican los datos de la propiedad 🏠 a alquilar o arrendar e inicio del arriendo.
+                        </p>
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="mb-3">
                                     <label htmlFor="ComunaPropiedad" className="form-label">
-                                        Comuna de la Propiedad
+                                        Comuna donde se ubica la Propiedad
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="ComunaPropiedad"
+                                        placeholder="Estación Central"
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="fechaInicioContrato" className="form-label">
-                                        Fecha de Inicio de Contrato
+                                        Fecha de Inicio del Arriendo
                                     </label>
                                     <input
                                         type="date"
                                         className="form-control"
                                         id="fechaInicioContrato"
+                                        placeholder="05-10-2024"
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="DuracionContrato" className="form-label">
-                                        Duración del Contrato (en meses)
+                                        Cuanto dura el Contrato (en meses)
                                     </label>
                                     <input
                                         type="number"
                                         className="form-control"
                                         id="DuracionContrato"
+                                        placeholder="12"
                                         onChange={handleInputChange}
                                     />
                                 </div>
@@ -244,49 +273,56 @@ function ContratoArriendo_Form() {
                 {step === 5 && (
                     <div>
                         <h3>Sección Precio, Garantía y Ajustes</h3>
+                        <p style={{ color: '#7a7a7a', fontSize: '14px' }}>
+                            En esta seccion es donde se indican el monto mensual a pagar por el arriendo, el valor de la garantía y dia de pago 💰.
+                        </p>
                         <div className="row">
                             <div className="col-md-6">
                                 <div className="mb-3">
                                     <label htmlFor="PrecioArriendo" className="form-label">
-                                        Precio de Arriendo
+                                        Precio de Arriendo mensual
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="PrecioArriendo"
+                                        placeholder="500.000"
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="DiaPago" className="form-label">
-                                        Día de Pago
+                                        India el número del Día de Pago
                                     </label>
                                     <input
                                         type="number"
                                         className="form-control"
                                         id="DiaPago"
+                                        placeholder="5"
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="GarantiaArriendo" className="form-label">
-                                        Garantía de Arriendo
+                                        Monto de la Garantía de Arriendo
                                     </label>
                                     <input
                                         type="text"
                                         className="form-control"
                                         id="GarantiaArriendo"
+                                        placeholder="500.000"
                                         onChange={handleInputChange}
                                     />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="Aviso" className="form-label">
-                                        Aviso de Terminación (en días)
+                                        Cantidad de días requeridos para dar aviso de Terminación.
                                     </label>
                                     <input
                                         type="number"
                                         className="form-control"
                                         id="Aviso"
+                                        placeholder="45"
                                         onChange={handleInputChange}
                                     />
                                 </div>

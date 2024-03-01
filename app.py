@@ -16,6 +16,8 @@ from flask_session import Session
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import JWTManager
 from uuid import uuid4
+from flask import jsonify
+import qrcode
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -45,12 +47,17 @@ admin.add_view(ModelView(User, db.session))
 @app.route("/documents", methods=["POST"])
 def create_document():
     try:
-        # Genera un UUID único para el documento
-        token = str(uuid4())
+        # Genera un UUID único de 11 caracteres
+        token = str(uuid4().hex)[:11].upper()
+
+        # Verifica si el token ya existe en la base de datos
+        while Document.query.filter_by(token=token).first() is not None:
+            token = str(uuid4().hex)[
+                :11
+            ].upper()  # Genera otro token si ya existe en la base de datos
 
         # Crea un nuevo documento con el token generado
-        new_document = Document()  # Crea una instancia de Document
-        new_document.token = token  # Asigna el valor del token
+        new_document = Document(token=token)  # Crea una instancia de Document
         db.session.add(new_document)
         db.session.commit()
 
@@ -62,6 +69,49 @@ def create_document():
             jsonify({"message": str(e)}),
             500,
         )  # Devuelve un código de error 500 en caso de fallo
+
+
+from flask import request
+
+
+@app.route("/validate", methods=["POST"])
+def validate_code():
+    try:
+        data = request.get_json()
+        if "verification_code" not in data:
+            return jsonify({"message": "Código de verificación no proporcionado"}), 400
+
+        verification_code = data["verification_code"]
+
+        # Busca el documento en la base de datos con el código de verificación
+        document = Document.query.filter_by(token=verification_code).first()
+
+        if document:
+            return jsonify({"message": "Código de verificación válido"}), 200
+        else:
+            return jsonify({"message": "Código de verificación no válido"}), 404
+
+    except Exception as e:
+        # Manejo de errores de la base de datos u otros errores
+        return jsonify({"message": str(e)}), 500
+
+
+@app.route("/generate_qr_code")
+def generate_qr_code():
+    try:
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data("https://www.google.cl")
+        qr.make(fit=True)
+        img = qr.make_image(fill_color="black", back_color="white")
+        img.save("qr_code.png")
+        return send_file("qr_code.png", mimetype="image/png")
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
 
 
 # Creacion de Endpoint GET personajes y Planetas.

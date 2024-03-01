@@ -22,6 +22,7 @@ import PrivateRoute from "./component/PrivateRoute"
 import Navbar_LM from "./component/Navbar_LM";
 import CartaAviso_Form from "./component/CartaAviso_Form";
 import ContratoArriendo_Form from "./component/ContratoArriendo_Form";
+import VerificationForm from "./component/VerificationForm";
 
 //render your react application
 ReactDOM.render(
@@ -30,6 +31,7 @@ ReactDOM.render(
 
       <Routes>
         <Route path="/carta_aviso" element={<CartaAviso_Form />} />
+        <Route path="/validate" element={<VerificationForm />} />
         <Route path="/contrato_arriendo" element={<ContratoArriendo_Form />} />
         <Route path="/home1" element={<Navbar_LM />} />
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />
