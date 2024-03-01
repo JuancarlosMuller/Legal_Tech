@@ -34,13 +34,7 @@ function ContratoArriendo_Form() {
     };
 
     const handleNextStep = () => {
-        // Validar si todos los campos están llenos antes de pasar al siguiente paso
-        const allFieldsFilled = Object.values(formData).every(value => value.trim() !== '');
-        if (allFieldsFilled) {
-            setStep(step + 1);
-        } else {
-            alert('Por favor complete todos los campos antes de continuar.');
-        }
+        setStep(step + 1);
     };
 
     const handlePreviousStep = () => {
